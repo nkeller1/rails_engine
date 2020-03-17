@@ -13,7 +13,7 @@ RSpec.describe Customer, type: :model do
   it 'can import rows from a CSV' do
     Customer.destroy_all
     Customer.import('spec/fixtures/customers.csv')
-
+    # require "pry"; binding.pry
     expect(Customer.all.count).to eq(5)
   end
 end
