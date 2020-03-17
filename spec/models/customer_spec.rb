@@ -1,7 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Customer, type: :model do
-  customer = Customer.create!
-    first_name { "Nathan" }
-    last_name { "Keller" }
+
+  describe 'validations' do
+    it {should validate_presence_of :first_name}
+    it {should validate_presence_of :last_name}
+  end
+
+  describe 'relationships' do
+  end
+
+  it 'can import rows from a CSV' do
+    Customer.destroy_all
+    Customer.import('spec/fixtures/customers.csv')
+    # require "pry"; binding.pry
+    expect(Customer.all.count).to eq(5)
+  end
 end

@@ -5,7 +5,5 @@ class CustomersController < ApplicationController
 
   def import
     Customer.import(params[:file])
-
-    redirect_to root_url, notice: "Customer Data imported!"
   end
 end
