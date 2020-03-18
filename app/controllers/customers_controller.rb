@@ -3,7 +3,7 @@ class CustomersController < ApplicationController
     @customers = Customer.all
   end
 
-  def import
-    Customer.import(params[:file])
-  end
+  # def import
+  #   Customer.import(params[:file])
+  # end
 end

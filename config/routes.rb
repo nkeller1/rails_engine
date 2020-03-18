@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   get 'customers/index'
   get 'customers/import'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  get 'merchants/index'
+
+  get 'items/index'
+
+  get 'invoices/index'
+
+  get 'transactions/index'
 end

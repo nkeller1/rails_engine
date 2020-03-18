@@ -7,14 +7,13 @@ desc "import data from CSVs"
     Customer.destroy_all
     CSV.foreach('lib/customers.csv', headers: true) do |row|
       row = row.to_hash
-      Customer.new(
+      Customer.create(
         :id => row['id'],
         :first_name => row['first_name'],
         :last_name => row['last_name'],
         :created_at => row['created_at'],
         :updated_at => row['updated_at'],
       )
-
     end
     puts "Customer Data Imported"
   end
@@ -23,7 +22,7 @@ desc "import data from CSVs"
     Invoice.destroy_all
     CSV.foreach('lib/invoices.csv', headers: true) do |row|
       row = row.to_hash
-      Invoice.new(
+      Invoice.create(
         :id => row['id'],
         :status => row['status'],
         :merchant_id => row['merchant_id'],
@@ -39,7 +38,7 @@ desc "import data from CSVs"
     Item.destroy_all
     CSV.foreach('lib/items.csv', headers: true) do |row|
       row = row.to_hash
-      Item.new(
+      Item.create(
         :id => row['id'],
         :name => row['name'],
         :description => row['description'],
@@ -56,7 +55,7 @@ desc "import data from CSVs"
     InvoiceItem.destroy_all
     CSV.foreach('lib/invoice_items.csv', headers: true) do |row|
       row = row.to_hash
-      InvoiceItem.new(
+      InvoiceItem.create(
         :id => row['id'],
         :quantity => row['quantity'],
         :unit_price => row['unit_price'],
@@ -73,7 +72,7 @@ desc "import data from CSVs"
     Merchant.destroy_all
     CSV.foreach('lib/merchants.csv', headers: true) do |row|
       row = row.to_hash
-      Merchant.new(
+      Merchant.create(
         :id => row['id'],
         :name => row['name'],
         :created_at => row['created_at'],
@@ -87,7 +86,7 @@ desc "import data from CSVs"
     Transaction.destroy_all
     CSV.foreach('lib/transactions.csv', headers: true) do |row|
       row = row.to_hash
-      Transaction.new(
+      Transaction.create(
         :id => row['id'],
         :credit_card_number => row['credit_card_number'],
         :credit_card_expiration_date => row['credit_card_expiration_date'],
