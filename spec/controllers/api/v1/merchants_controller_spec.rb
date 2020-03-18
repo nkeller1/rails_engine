@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CustomersController, type: :controller do
+RSpec.describe Api::V1::MerchantsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
