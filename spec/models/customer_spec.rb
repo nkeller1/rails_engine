@@ -7,10 +7,7 @@ RSpec.describe Customer, type: :model do
     it {should validate_presence_of :last_name}
   end
 
-  describe 'relationships' do
-  end
-
-  it 'can import rows from a CSV' do
+  xit 'can import rows from a CSV' do
     Customer.destroy_all
     Customer.import('spec/fixtures/customers.csv')
     # require "pry"; binding.pry
