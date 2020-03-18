@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
-  get 'customers/index'
-  get 'customers/import'
+
+  namespace :api do
+    namespace :v1 do
+      resources :invoices, only: [:index]
+      resources :customers, only: [:index]
+    end
+  end
 
   get 'merchants/index'
 
   get 'items/index'
 
-  get 'invoices/index'
 
   get 'transactions/index'
 end

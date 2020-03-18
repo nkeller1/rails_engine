@@ -5,6 +5,7 @@ desc "import data from CSVs"
   namespace :import do
   task :customers => :environment do
     Customer.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('customers')
     CSV.foreach('lib/customers.csv', headers: true) do |row|
       row = row.to_hash
       Customer.create(
