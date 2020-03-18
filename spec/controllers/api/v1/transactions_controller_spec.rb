@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TransactionsController, type: :controller do
+RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
