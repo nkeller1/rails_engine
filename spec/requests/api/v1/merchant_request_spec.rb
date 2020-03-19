@@ -31,38 +31,42 @@ describe "Merchant API" do
     expect(merchant['data']['id']).to eq(merchant1.id.to_s)
   end
 
-  # it "can create a new item" do
-  #   merchant_params = { name: "Saw", description: "I want to play a game" }
+  it "can create a new merchant" do
+    merchant_params = { name: "Saw" }
+
+    post "/api/v1/merchants", params: {merchant: merchant_params}
+    merchant = Merchant.last
+
+    expect(response).to be_successful
+
+    expect(merchant.name).to eq(merchant_params[:name])
+  end
   #
-  #   post "/api/v1/items", params: {item: merchant_params}
-  #   item = Item.last
-  #
-  #   expect(response).to be_successful
-  #   expect(item.name).to eq(merchant_params[:name])
-  # end
-  #
-  # it "can update an existing item" do
-  #   id = create(:item).id
-  #   previous_name = Item.last.name
-  #   merchant_params = { name: "Sledge" }
-  #
-  #   put "/api/v1/items/#{id}", params: {item: merchant_params}
-  #   item = Item.find_by(id: id)
-  #
-  #   expect(response).to be_successful
-  #   expect(item.name).to_not eq(previous_name)
-  #   expect(item.name).to eq("Sledge")
-  # end
-  #
-  # it "can destroy an item" do
-  #   item = create(:item)
-  #
-  #   expect(Item.count).to eq(1)
-  #
-  #   delete "/api/v1/items/#{item.id}"
-  #
-  #   expect(response).to be_successful
-  #   expect(Item.count).to eq(0)
-  #   expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
-  # end
+  it "can update an existing merchant" do
+    id = create(:merchant).id
+
+    previous_name = Merchant.last.name
+
+    merchant_params = { name: "Sledge" }
+
+    put "/api/v1/merchants/#{id}", params: {merchant: merchant_params}
+    merchant = Merchant.find_by(id: id)
+
+    expect(response).to be_successful
+
+    expect(merchant.name).to_not eq(previous_name)
+    expect(merchant.name).to eq("Sledge")
+  end
+
+  it "can destroy an merchant" do
+    merchant = create(:merchant)
+
+    expect(Merchant.count).to eq(1)
+
+    delete "/api/v1/merchants/#{merchant.id}"
+
+    expect(response).to be_successful
+    expect(Merchant.count).to eq(0)
+    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
