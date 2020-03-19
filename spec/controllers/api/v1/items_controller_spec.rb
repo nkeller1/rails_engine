@@ -4,8 +4,12 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
-      create_list(:item, 5)
-
+      merchant = create(:merchant)
+      item = create(:item, merchant: merchant)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      
+      require "pry"; binding.pry
       get :index
 
       expect(response).to have_http_status(:success)
