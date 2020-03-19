@@ -8,11 +8,14 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       item = create(:item, merchant: merchant)
       item1 = create(:item, merchant: merchant)
       item2 = create(:item, merchant: merchant)
-      
-      require "pry"; binding.pry
+
       get :index
 
       expect(response).to have_http_status(:success)
+
+      items = JSON.parse(response.body)
+      
+      expect(items.count).to eq(3)
     end
   end
 end
