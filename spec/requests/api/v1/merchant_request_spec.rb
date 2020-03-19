@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Items API" do
+describe "Merchant API" do
   Merchant.destroy_all
   it "sends a list of merchants" do
     merchant = create(:merchant)
@@ -14,8 +14,8 @@ describe "Items API" do
 
     expect(response).to be_successful
 
-    merchants = JSON.parse(response.body)
+    merchants = JSON.parse(response.body)["data"]
     require "pry"; binding.pry
-    expect(merchants.count).to eq(1)
+    expect(merchants.count).to eq(2)
   end
 end

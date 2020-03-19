@@ -13,8 +13,8 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
       expect(response).to have_http_status(:success)
 
-      items = JSON.parse(response.body)
-      
+      items = JSON.parse(response.body)['data']
+
       expect(items.count).to eq(3)
     end
   end
