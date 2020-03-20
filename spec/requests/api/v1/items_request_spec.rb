@@ -29,16 +29,16 @@ describe "Items API" do
     expect(item1['data']['id']).to eq(item.id.to_s)
   end
 
-  xit "can create a new item" do
+  it "can create a new item" do
     merchant = create(:merchant)
     item_params = {
       name: "Rufus",
       description: "Best Stuffed Animal",
-      unit_price: 5
+      unit_price: 5,
+      merchant_id: merchant.id
       }
 
-    require "pry"; binding.pry
-    post "/api/v1/items", params: {item: item_params}
+    post "/api/v1/items", params: item_params
 
     item = Item.last
 
@@ -48,13 +48,13 @@ describe "Items API" do
 
   it "can update an existing item" do
     merchant = create(:merchant)
-    item = create(:item, merchant: merchant)
+    item = create(:item, merchant_id: merchant.id)
 
     previous_name = Item.last.name
 
     item_params = { name: "Rufus", description: "Best Friend", unit_price: 10 }
 
-    put "/api/v1/items/#{item.id}", params: {item: item_params}
+    put "/api/v1/items/#{item.id}", params: item_params
     item1 = Item.find_by(id: item.id)
 
     expect(response).to be_successful
