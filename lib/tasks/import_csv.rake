@@ -21,6 +21,7 @@ desc "import data from CSVs"
 
   task :invoices => :environment do
     Invoice.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('invoices')
     CSV.foreach('lib/invoices.csv', headers: true) do |row|
       row = row.to_hash
       Invoice.create(
@@ -38,6 +39,7 @@ desc "import data from CSVs"
   task :items => :environment do
     Item.destroy_all
     CSV.foreach('lib/items.csv', headers: true) do |row|
+      ActiveRecord::Base.connection.reset_pk_sequence!('items')
       row = row.to_hash
       Item.create(
         :id => row['id'],
@@ -54,6 +56,7 @@ desc "import data from CSVs"
 
   task :invoice_items => :environment do
     InvoiceItem.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('invoice_items')
     CSV.foreach('lib/invoice_items.csv', headers: true) do |row|
       row = row.to_hash
       InvoiceItem.create(
@@ -71,6 +74,7 @@ desc "import data from CSVs"
 
   task :merchants => :environment do
     Merchant.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('merchants')
     CSV.foreach('lib/merchants.csv', headers: true) do |row|
       row = row.to_hash
       Merchant.create(
@@ -85,6 +89,7 @@ desc "import data from CSVs"
 
   task :transactions => :environment do
     Transaction.destroy_all
+    ActiveRecord::Base.connection.reset_pk_sequence!('transactions')
     CSV.foreach('lib/transactions.csv', headers: true) do |row|
       row = row.to_hash
       Transaction.create(
