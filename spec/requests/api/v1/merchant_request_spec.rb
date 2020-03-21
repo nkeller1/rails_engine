@@ -136,11 +136,44 @@ describe "Merchant API" do
       expect(response).to be_successful
 
       search = JSON.parse(response.body)['data']
-      require "pry"; binding.pry
+
       expect(search.first['attributes']['name']).to eql("Joe's Shack")
       expect(search.first['id']).to eq(merchant.id.to_s)
       expect(search.first['attributes']).to have_key('name')
       expect(search.first['attributes']['name']).to eq (merchant_1.name)
+    end
+
+    it "can find the x number of merchants with the most revenue" do
+      merchant = create(:merchant)
+      merchant1 = create(:merchant)
+
+      item = create(:item, merchant: merchant)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant1)
+
+      customer = create(:customer)
+      customer1 = create(:customer)
+      customer2 = create(:customer)
+
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+      invoice2 = create(:invoice, customer: customer2, merchant: merchant1)
+
+      invoiceitem = create(:invoice_item, item: item, invoice: invoice)
+      invoiceitem1 = create(:invoice_item, item: item1, invoice: invoice1)
+      invoiceitem2 = create(:invoice_item, item: item2, invoice: invoice2)
+
+      transaction = create(:transaction, invoice: invoice)
+      transaction1 = create(:transaction, invoice: invoice1)
+      transaction2 = create(:transaction, invoice: invoice2)
+
+      get "/api/v1/merchants/most_revenue?quantity=3"
+
+      expect(response).to be_successful
+
+      most_revenue_merchants = JSON.parse(response.body)['data']
+
+      expect(most_revenue_merchants.first['attributes']['name']).to eql(merchant.name)
     end
   end
 end
