@@ -148,5 +148,38 @@ describe "Items API" do
       expect(search.first['attributes']).to have_key('name')
       expect(search.first['attributes']['name']).to eq (item_1.name)
     end
+
+    describe "multi finders" do
+      it 'can find multiple item by their name' do
+        item = create(:item, name: "Seltzer Shack")
+        item1 = create(:item, name: "Seltzer Shack")
+
+        get "/api/v1/items/find_all?name=Seltzer Shack"
+
+        expect(response).to be_successful
+
+        all_items = JSON.parse(response.body)['data']
+
+        expect(all_items.first['attributes']['name']).to eql("Seltzer Shack")
+        expect(all_items.last['attributes']['name']).to eql("Seltzer Shack")
+        expect(all_items.length).to eq(2)
+      end
+
+      it 'can find multiple item by their description' do
+        item = create(:item, description: "yummy")
+        item1 = create(:item, description: "yummy")
+        item3 = create(:item)
+
+        get "/api/v1/items/find_all?description=yummy"
+
+        expect(response).to be_successful
+
+        all_items = JSON.parse(response.body)['data']
+        
+        expect(all_items.first['id']).to eql(item.id.to_s)
+        expect(all_items.last['id']).to eql(item1.id.to_s)
+        expect(all_items.last['id']).not_to eql(item3.id.to_s)
+      end
+    end
   end
 end
