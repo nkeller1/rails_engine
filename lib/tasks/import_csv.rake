@@ -1,7 +1,6 @@
 require 'csv'
 
 desc "import data from CSVs"
-  # namespace :import do
   task :import => :environment do
     system "rake db:reset > /dev/null"
     ActiveRecord::Base.connection.tables.each do |t|
@@ -19,9 +18,7 @@ desc "import data from CSVs"
       )
     end
     puts "Customer Data Imported"
-  # end
 
-  # task :merchants => :environment do
     CSV.foreach('lib/merchants.csv', headers: true) do |row|
       row = row.to_hash
       Merchant.create(
@@ -32,9 +29,7 @@ desc "import data from CSVs"
       )
     end
     puts "Merchant Data Imported"
-  # end
 
-  # task :items => :environment do
     CSV.foreach('lib/items.csv', headers: true) do |row|
       ActiveRecord::Base.connection.reset_pk_sequence!('items')
       row = row.to_hash
@@ -49,9 +44,7 @@ desc "import data from CSVs"
       )
     end
     puts "Item Data Imported"
-  # end
 
-  # task :invoices => :environment do
     CSV.foreach('lib/invoices.csv', headers: true) do |row|
       row = row.to_hash
       Invoice.create(
@@ -64,10 +57,7 @@ desc "import data from CSVs"
       )
     end
     puts "Invoice Data Imported"
-  # end
 
-  # task :invoice_items => :environment do
-    ActiveRecord::Base.connection.reset_pk_sequence!('invoice_items')
     CSV.foreach('lib/invoice_items.csv', headers: true) do |row|
       row = row.to_hash
       InvoiceItem.create(
@@ -81,9 +71,7 @@ desc "import data from CSVs"
       )
     end
     puts "Invoice Item Data Imported"
-  # end
 
-  # task :transactions => :environment do
     CSV.foreach('lib/transactions.csv', headers: true) do |row|
       row = row.to_hash
       Transaction.create(
@@ -97,5 +85,5 @@ desc "import data from CSVs"
       )
     end
     puts "Transaction Data Imported"
-  # end
+
 end
