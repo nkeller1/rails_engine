@@ -1,4 +1,4 @@
-class Api::V1::Items::ItemsMerchantController < ApplicationController
+class Api::V1::ItemsMerchantController < ApplicationController
   before_action :set_item
 
   def index
