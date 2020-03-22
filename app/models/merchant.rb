@@ -14,9 +14,22 @@ class Merchant < ApplicationRecord
     .joins(:invoice_items)
     .joins(:transactions)
     .where(transactions: {result: :success})
-    .select('merchants.*, sum(invoice_items.unit_price*invoice_items.quantity) as revenue')
+    .select('merchants.*, sum(invoice_items.unit_price*invoice_items.quantity) AS revenue')
     .group(:id)
     .order(revenue: :desc)
+    .limit(quantity)
+  end
+
+  def self.most_items_sold(quantity)
+    self.all
+    .joins(:items)
+    .joins(:invoices)
+    .joins(:invoice_items)
+    .joins(:transactions)
+    .where(transactions: {result: :success})
+    .select('merchants.*, count(items) AS count')
+    .group(:id)
+    .order(count: :desc)
     .limit(quantity)
   end
 end
