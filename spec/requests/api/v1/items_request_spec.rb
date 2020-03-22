@@ -74,4 +74,79 @@ describe "Items API" do
     expect(Item.count).to eq(0)
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  describe 'Item find Endpoints' do
+    it 'can find an item by its id' do
+      merchant = create(:merchant)
+      item = create(:item, id: 65)
+
+      get "/api/v1/items/find?id=#{item.id.to_s}"
+
+      item1 = JSON.parse(response.body)['data']
+
+      expect(response).to be_successful
+      expect(item1.first['id']).to eql("65")
+    end
+
+    it 'can find an item by its name' do
+      item = create(:item, name: "Hippty Hop")
+
+      get "/api/v1/items/find?name=#{item.name}"
+
+      item1 = JSON.parse(response.body)['data']
+
+      expect(response).to be_successful
+      expect(item1.first['attributes']['name']).to eq(item.name)
+    end
+
+    it 'can find an item by its created_at_date' do
+      item = create(:item, created_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+
+      get "/api/v1/items/find?created_at=#{item.created_at}"
+
+      item1 = JSON.parse(response.body)['data']
+
+      expect(response).to be_successful
+      expect(item1.first['id']).to eql(item.id.to_s)
+    end
+
+    it 'can find a item by its updated_at date' do
+      item = create(:item, updated_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+
+      get "/api/v1/items/find?updated_at=#{item.updated_at}"
+
+      item1 = JSON.parse(response.body)['data']
+
+      expect(response).to be_successful
+      expect(item1.first['id']).to eql(item.id.to_s)
+    end
+
+    it 'can find a item by multiple attributes' do
+      item = create(:item, name: "Seltzer", description: "Yummy")
+
+      get "/api/v1/items/find?name=#{item.name}&description=#{item.description}"
+
+      item1 = JSON.parse(response.body)['data']
+
+      expect(response).to be_successful
+      expect(item1.first['attributes']['name']).to eql("Seltzer")
+    end
+
+    xit 'can find a merchant based on partial parameters' do
+      merchant = create(:merchant, name: "Joe's Shack")
+      merchant1 = create(:merchant, name: "Johns Shack")
+      merchant1 = create(:merchant, name: "Nathan's Place")
+
+      get "/api/v1/merchants/find?name=Jo"
+
+      expect(response).to be_successful
+
+      search = JSON.parse(response.body)['data']
+
+      expect(search.first['attributes']['name']).to eql("Joe's Shack")
+      expect(search.first['id']).to eq(merchant.id.to_s)
+      expect(search.first['attributes']).to have_key('name')
+      expect(search.first['attributes']['name']).to eq (merchant_1.name)
+    end
+  end
 end

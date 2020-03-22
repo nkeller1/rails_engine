@@ -8,12 +8,12 @@ Rails.application.routes.draw do
       resources :merchants
         # get '/find_all', to: 'find#show'
 
-      resources :items
-      namespace :items do
-        get '/:id/merchant', to: 'items_merchant#index'
-        get '/find', to: 'find#index'
-        get '/find_all', to: 'find#show'
-      end
+      # namespace :items do
+        get '/items/:id/merchant', to: 'items_merchant#index'
+        get '/items/find', to: 'item_find#show'
+        resources :items
+        # get '/find_all', to: 'find#show'
+      # end
 
       resources :invoices, only: [:index]
       resources :customers, only: [:index]
