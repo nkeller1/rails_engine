@@ -84,7 +84,7 @@ describe "Merchant API" do
 
     it 'can find a merchant by their name' do
       merchant = create(:merchant, name: "Seltzer Shack")
-
+      merchant2 = create(:merchant)
       get "/api/v1/merchants/find?name=#{merchant.name}"
 
       merchant1 = JSON.parse(response.body)['data']
@@ -116,14 +116,16 @@ describe "Merchant API" do
     end
 
     it 'can find a merchant by multiple attributes' do
-      merchant = create(:merchant, name: "Seltzer Shack", updated_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00," )
+      merchant2 = create(:merchant, name: "Seltzer Shack", updated_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00" )
+      merchant = create(:merchant, name: "Seltzer Shack")
 
-      get "/api/v1/merchants/find?name=#{merchant.name}&updated_at=#{merchant.updated_at}"
+      get "/api/v1/merchants/find?name=#{merchant2.name}&updated_at=#{merchant2.updated_at}"
 
       merchant1 = JSON.parse(response.body)['data']
 
       expect(response).to be_successful
-      expect(merchant1.first['attributes']['name']).to eql("Seltzer Shack")
+      expect(merchant1.first['id']).to eql(merchant2.id.to_s)
+      expect(merchant1.first['id']).not_to eql(merchant.id.to_s)
     end
 
     xit 'can find a merchant based on partial parameters' do
@@ -142,7 +144,40 @@ describe "Merchant API" do
       expect(search.first['attributes']).to have_key('name')
       expect(search.first['attributes']['name']).to eq (merchant_1.name)
     end
+  end
+  describe "multi finders" do
+    it 'can find multiple merchant by their name' do
+      merchant = create(:merchant, name: "Seltzer Shack")
+      merchant1 = create(:merchant, name: "Seltzer Shack")
 
+      get "/api/v1/merchants/find_all?name=Seltzer Shack"
+
+      expect(response).to be_successful
+
+      all_merchants = JSON.parse(response.body)['data']
+
+      expect(all_merchants.first['attributes']['name']).to eql("Seltzer Shack")
+      expect(all_merchants.last['attributes']['name']).to eql("Seltzer Shack")
+    end
+
+    it 'can find multiple merchant by their created_at' do
+      merchant = create(:merchant, created_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+      merchant1 = create(:merchant, created_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+      merchant3 = create(:merchant)
+
+      get "/api/v1/merchants/find_all?created_at=Sat, 21 Mar 2020 18:30:25 UTC +00:00,"
+
+      expect(response).to be_successful
+
+      all_merchants = JSON.parse(response.body)['data']
+
+      expect(all_merchants.first['id']).to eql(merchant.id.to_s)
+      expect(all_merchants.last['id']).to eql(merchant1.id.to_s)
+      expect(all_merchants.last['id']).not_to eql(merchant3.id.to_s)
+    end
+  end
+
+  describe 'business intelligence endpoints' do
     it "can find the x number of merchants with the most revenue" do
       merchant = create(:merchant)
       merchant1 = create(:merchant)
