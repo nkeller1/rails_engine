@@ -24,7 +24,6 @@ class Merchant < ApplicationRecord
     self.all
     .joins(:items)
     .joins(:invoices)
-    .joins(:invoice_items)
     .joins(:transactions)
     .where(transactions: {result: :success})
     .select('merchants.*, count(items) AS count')

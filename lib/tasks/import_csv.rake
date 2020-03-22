@@ -1,6 +1,5 @@
 require 'csv'
-# require './app/models/application_record'
-# require './app/models/customer'
+
 desc "import data from CSVs"
   namespace :import do
   task :customers => :environment do
@@ -45,7 +44,7 @@ desc "import data from CSVs"
         :id => row['id'],
         :name => row['name'],
         :description => row['description'],
-        :unit_price => row['unit_price'],
+        :unit_price => (row['unit_price'].to_i / 100.00),
         :merchant_id => row['merchant_id'],
         :created_at => row['created_at'],
         :updated_at => row['updated_at'],
@@ -62,7 +61,7 @@ desc "import data from CSVs"
       InvoiceItem.create(
         :id => row['id'],
         :quantity => row['quantity'],
-        :unit_price => row['unit_price'],
+        :unit_price => (row['unit_price'].to_i / 100.00),
         :invoice_id => row['invoice_id'],
         :item_id => row['item_id'],
         :created_at => row['created_at'],
