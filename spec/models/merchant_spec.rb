@@ -43,6 +43,7 @@ RSpec.describe Merchant, type: :model do
     it "#most_items_sold" do
       merchant = create(:merchant)
       merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
 
       item = create(:item, merchant: merchant)
       item1 = create(:item, merchant: merchant)
@@ -64,6 +65,7 @@ RSpec.describe Merchant, type: :model do
       transaction1 = create(:transaction, invoice: invoice1)
       transaction2 = create(:transaction, invoice: invoice2)
 
+      expect(Merchant.all.most_items_sold(2).length).to eq(2)
       expect(Merchant.all.most_items_sold(2)).to eq([merchant, merchant1])
       expect(Merchant.all.most_items_sold(1)).to eq([merchant])
       expect(Merchant.all.most_items_sold(1)).not_to eq([merchant1])
