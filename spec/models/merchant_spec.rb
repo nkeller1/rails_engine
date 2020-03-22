@@ -10,8 +10,8 @@ RSpec.describe Merchant, type: :model do
     it {should have_many :invoices}
   end
 
-  describe 'instance methods' do
-    it ".most_items_sold" do
+  describe 'class methods' do
+    it "#most_items_sold" do
       merchant = create(:merchant)
       merchant1 = create(:merchant)
 

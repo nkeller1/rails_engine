@@ -116,7 +116,7 @@ describe "Merchant API" do
     end
 
     it 'can find a merchant by multiple attributes' do
-      merchant2 = create(:merchant, name: "Seltzer Shack", updated_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00," )
+      merchant2 = create(:merchant, name: "Seltzer Shack", updated_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00" )
       merchant = create(:merchant, name: "Seltzer Shack")
 
       get "/api/v1/merchants/find?name=#{merchant2.name}&updated_at=#{merchant2.updated_at}"
@@ -158,6 +158,22 @@ describe "Merchant API" do
 
       expect(all_merchants.first['attributes']['name']).to eql("Seltzer Shack")
       expect(all_merchants.last['attributes']['name']).to eql("Seltzer Shack")
+    end
+
+    it 'can find multiple merchant by their created_at' do
+      merchant = create(:merchant, created_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+      merchant1 = create(:merchant, created_at: "Sat, 21 Mar 2020 18:30:25 UTC +00:00,")
+      merchant3 = create(:merchant)
+
+      get "/api/v1/merchants/find_all?created_at=Sat, 21 Mar 2020 18:30:25 UTC +00:00,"
+
+      expect(response).to be_successful
+
+      all_merchants = JSON.parse(response.body)['data']
+
+      expect(all_merchants.first['id']).to eql(merchant.id.to_s)
+      expect(all_merchants.last['id']).to eql(merchant1.id.to_s)
+      expect(all_merchants.last['id']).not_to eql(merchant3.id.to_s)
     end
   end
 
