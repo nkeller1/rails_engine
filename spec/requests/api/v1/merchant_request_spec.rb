@@ -142,7 +142,24 @@ describe "Merchant API" do
       expect(search.first['attributes']).to have_key('name')
       expect(search.first['attributes']['name']).to eq (merchant_1.name)
     end
+  end
+  describe "multi finders" do
+    it 'can find multiple merchant by their name' do
+      merchant = create(:merchant, name: "Seltzer Shack")
+      merchant1 = create(:merchant, name: "Seltzer Shack")
 
+      get "/api/v1/merchants/find_all?name=Seltzer Shack"
+
+      expect(response).to be_successful
+
+      all_merchants = JSON.parse(response.body)['data']
+      
+      expect(all_merchants.first['attributes']['name']).to eql("Seltzer Shack")
+      expect(all_merchants.last['attributes']['name']).to eql("Seltzer Shack")
+    end
+  end
+
+  describe 'business intelligence endpoints' do
     it "can find the x number of merchants with the most revenue" do
       merchant = create(:merchant)
       merchant1 = create(:merchant)
