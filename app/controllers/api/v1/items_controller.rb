@@ -12,7 +12,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    render json: Item.update(item_params)
+    item = Item.find(params[:id])
+    render json: item.update(item_params)
   end
 
   def destroy
