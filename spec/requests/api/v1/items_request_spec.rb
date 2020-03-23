@@ -132,22 +132,22 @@ describe "Items API" do
       expect(item1.first['attributes']['name']).to eql("Seltzer")
     end
 
-    xit 'can find an item based on partial parameters' do
-      item = create(:item, name: "Joe's Shack")
-      item1 = create(:item, name: "Johns Shack")
-      item1 = create(:item, name: "Nathan's Place")
-
-      get "/api/v1/items/find?name=Jo"
-
-      expect(response).to be_successful
-
-      search = JSON.parse(response.body)['data']
-
-      expect(search.first['attributes']['name']).to eql("Joe's Shack")
-      expect(search.first['id']).to eq(item.id.to_s)
-      expect(search.first['attributes']).to have_key('name')
-      expect(search.first['attributes']['name']).to eq (item_1.name)
-    end
+    # xit 'can find an item based on partial parameters' do
+    #   item = create(:item, name: "Joe's Shack")
+    #   item1 = create(:item, name: "Johns Shack")
+    #   item1 = create(:item, name: "Nathan's Place")
+    #
+    #   get "/api/v1/items/find?name=Jo"
+    #
+    #   expect(response).to be_successful
+    #
+    #   search = JSON.parse(response.body)['data']
+    #
+    #   expect(search.first['attributes']['name']).to eql("Joe's Shack")
+    #   expect(search.first['id']).to eq(item.id.to_s)
+    #   expect(search.first['attributes']).to have_key('name')
+    #   expect(search.first['attributes']['name']).to eq (item_1.name)
+    # end
 
     describe "multi finders" do
       it 'can find multiple item by their name' do
@@ -175,7 +175,7 @@ describe "Items API" do
         expect(response).to be_successful
 
         all_items = JSON.parse(response.body)['data']
-        
+
         expect(all_items.first['id']).to eql(item.id.to_s)
         expect(all_items.last['id']).to eql(item1.id.to_s)
         expect(all_items.last['id']).not_to eql(item3.id.to_s)
