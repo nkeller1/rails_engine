@@ -41,7 +41,7 @@ describe "Merchant API" do
 
     expect(merchant.name).to eq(merchant_params[:name])
   end
-  #
+
   it "can update an existing merchant" do
     id = create(:merchant).id
 
@@ -128,22 +128,22 @@ describe "Merchant API" do
       expect(merchant1.first['id']).not_to eql(merchant.id.to_s)
     end
 
-    xit 'can find a merchant based on partial parameters' do
-      merchant = create(:merchant, name: "Joe's Shack")
-      merchant1 = create(:merchant, name: "Johns Shack")
-      merchant1 = create(:merchant, name: "Nathan's Place")
-
-      get "/api/v1/merchants/find?name=Jo"
-
-      expect(response).to be_successful
-
-      search = JSON.parse(response.body)['data']
-
-      expect(search.first['attributes']['name']).to eql("Joe's Shack")
-      expect(search.first['id']).to eq(merchant.id.to_s)
-      expect(search.first['attributes']).to have_key('name')
-      expect(search.first['attributes']['name']).to eq (merchant_1.name)
-    end
+    # xit 'can find a merchant based on partial parameters' do
+    #   merchant = create(:merchant, name: "Joe's Shack")
+    #   merchant1 = create(:merchant, name: "Johns Shack")
+    #   merchant1 = create(:merchant, name: "Nathan's Place")
+    #
+    #   get "/api/v1/merchants/find?name=Jo"
+    #
+    #   expect(response).to be_successful
+    #
+    #   search = JSON.parse(response.body)['data']
+    #
+    #   expect(search.first['attributes']['name']).to eql("Joe's Shack")
+    #   expect(search.first['id']).to eq(merchant.id.to_s)
+    #   expect(search.first['attributes']).to have_key('name')
+    #   expect(search.first['attributes']['name']).to eq (merchant_1.name)
+    # end
   end
   describe "multi finders" do
     it 'can find multiple merchant by their name' do
@@ -274,7 +274,7 @@ describe "Merchant API" do
       get "/api/v1/merchants/#{merchant.id}/revenue"
 
       expect(response).to be_successful
-      
+
       merchant_rev = JSON.parse(response.body)
 
       expect(merchant_rev).to eql(15.0)
