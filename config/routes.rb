@@ -6,14 +6,14 @@ Rails.application.routes.draw do
       get '/merchants/find', to: 'merchant_find#show'
       get 'merchants/find_all', to: 'merchant_find#index'
       get '/merchants/most_revenue', to: 'most_revenue#index'
+      get '/merchants/most_items_sold', to: 'most_items_sold#index'
+      get '/merchants/:id/revenue', to: 'revenue#index'
       resources :merchants
 
-      # namespace :items do
-        get '/items/:id/merchant', to: 'items_merchant#index'
-        get '/items/find', to: 'item_find#show'
-        get '/items/find_all', to: 'item_find#index'
-        resources :items
-      # end
+      get '/items/:id/merchant', to: 'items_merchant#index'
+      get '/items/find', to: 'item_find#show'
+      get '/items/find_all', to: 'item_find#index'
+      resources :items
 
       resources :invoices, only: [:index]
       resources :customers, only: [:index]

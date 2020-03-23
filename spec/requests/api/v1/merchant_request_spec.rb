@@ -210,5 +210,74 @@ describe "Merchant API" do
 
       expect(most_revenue_merchants.first['attributes']['name']).to eql(merchant.name)
     end
+
+    it "can find the x number of merchants with the most items sold" do
+      merchant = create(:merchant)
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
+
+      item = create(:item, merchant: merchant)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant1)
+
+      customer = create(:customer)
+      customer1 = create(:customer)
+      customer2 = create(:customer)
+
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+      invoice2 = create(:invoice, customer: customer2, merchant: merchant1)
+
+      invoiceitem = create(:invoice_item, item: item, invoice: invoice)
+      invoiceitem1 = create(:invoice_item, item: item1, invoice: invoice1)
+      invoiceitem2 = create(:invoice_item, item: item2, invoice: invoice2)
+
+      transaction = create(:transaction, invoice: invoice)
+      transaction1 = create(:transaction, invoice: invoice1)
+      transaction2 = create(:transaction, invoice: invoice2)
+
+      get "/api/v1/merchants/most_items_sold?quantity=3"
+
+      expect(response).to be_successful
+
+      most_items_merchants = JSON.parse(response.body)['data']
+
+      expect(most_items_merchants.first['attributes']['name']).to eql(merchant.name)
+    end
+    it "can find the total reveune of a single merchant" do
+
+      merchant = create(:merchant)
+
+      item = create(:item, merchant: merchant)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      itemnotincluded = create(:item, merchant: merchant)
+
+      customer = create(:customer)
+      customer1 = create(:customer)
+      customer2 = create(:customer)
+
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+      invoice2 = create(:invoice, customer: customer2, merchant: merchant)
+      invoicenotincluded = create(:invoice, customer: customer2, merchant: merchant)
+
+      invoiceitem = create(:invoice_item, item: item, invoice: invoice)
+      invoiceitem1 = create(:invoice_item, item: item1, invoice: invoice1)
+      invoiceitem2 = create(:invoice_item, item: item2, invoice: invoice2)
+      invoiceitemnotincluded = create(:invoice_item, item: itemnotincluded, invoice: invoicenotincluded)
+
+      transaction = create(:transaction, invoice: invoice)
+      transaction1 = create(:transaction, invoice: invoice1)
+      transaction2 = create(:transaction, invoice: invoice2)
+      transactionnotincluded = create(:transaction)
+      get "/api/v1/merchants/#{merchant.id}/revenue"
+
+      expect(response).to be_successful
+      
+      merchant_rev = JSON.parse(response.body)
+
+      expect(merchant_rev).to eql(15.0)
+    end
   end
 end
