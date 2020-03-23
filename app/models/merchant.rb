@@ -26,4 +26,10 @@ class Merchant < ApplicationRecord
     .order(count: :desc)
     .limit(quantity)
   end
+
+  def revenue
+    Merchant.joins(invoices: [:invoice_items, :transactions])
+    .where(transactions: {result: :success})
+    .sum(:unit_price)
+  end
 end

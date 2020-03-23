@@ -71,4 +71,36 @@ RSpec.describe Merchant, type: :model do
       expect(Merchant.all.most_items_sold(1)).not_to eq([merchant1])
     end
   end
+
+  describe 'instance methods' do
+    it ".reveune" do
+      merchant = create(:merchant)
+
+      item = create(:item, merchant: merchant)
+      item1 = create(:item, merchant: merchant)
+      item2 = create(:item, merchant: merchant)
+      itemnotincluded = create(:item, merchant: merchant)
+
+      customer = create(:customer)
+      customer1 = create(:customer)
+      customer2 = create(:customer)
+
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      invoice1 = create(:invoice, customer: customer1, merchant: merchant)
+      invoice2 = create(:invoice, customer: customer2, merchant: merchant)
+      invoicenotincluded = create(:invoice, customer: customer2, merchant: merchant)
+
+      invoiceitem = create(:invoice_item, item: item, invoice: invoice)
+      invoiceitem1 = create(:invoice_item, item: item1, invoice: invoice1)
+      invoiceitem2 = create(:invoice_item, item: item2, invoice: invoice2)
+      invoiceitemnotincluded = create(:invoice_item, item: itemnotincluded, invoice: invoicenotincluded)
+
+      transaction = create(:transaction, invoice: invoice)
+      transaction1 = create(:transaction, invoice: invoice1)
+      transaction2 = create(:transaction, invoice: invoice2)
+      transactionnotincluded = create(:transaction)
+
+      expect(merchant.revenue).to eq(15)
+    end
+  end
 end
